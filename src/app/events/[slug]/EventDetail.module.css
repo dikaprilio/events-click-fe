@@ -1,0 +1,165 @@
+.pageContainer {
+    padding-bottom: 100px;
+}
+
+.heroBanner {
+    height: 60vh;
+    min-height: 400px;
+    background: linear-gradient(45deg, #1a1a24, #2a2a35);
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 60px;
+}
+
+.bannerOverlay {
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.badge {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: white;
+    max-width: 800px;
+    line-height: 1.1;
+}
+
+.contentLayout {
+    margin-top: -60px;
+    position: relative;
+    z-index: 3;
+}
+
+.infoCard {
+    background: var(--bg-dark);
+    padding: 30px;
+    margin-bottom: 60px;
+    border: 1px solid var(--border-subtle);
+}
+
+.infoGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.value {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.description h3 {
+    font-size: 1.75rem;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+}
+
+.description p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+}
+
+.galleryItem {
+    aspect-ratio: 4/3;
+    background: var(--bg-dark-tertiary);
+    border-radius: var(--radius-md);
+}
+
+.relatedSection {
+    margin-top: 100px;
+    padding-top: 60px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.relatedSection h2 {
+    margin-bottom: 40px;
+}
+
+.relatedGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.relatedCard {
+    display: block;
+    background: var(--bg-dark-tertiary);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: transform var(--transition-base);
+}
+
+.relatedCard:hover {
+    transform: translateY(-5px);
+}
+
+.relatedImage {
+    height: 200px;
+    background: linear-gradient(135deg, #2a2a35, #1a1a24);
+}
+
+.relatedContent {
+    padding: 20px;
+}
+
+.relatedContent h4 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.relatedContent span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+
+    .infoGrid,
+    .gallery,
+    .relatedGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .heroBanner {
+        height: 50vh;
+    }
+}
