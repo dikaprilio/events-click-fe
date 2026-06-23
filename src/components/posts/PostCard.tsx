@@ -14,8 +14,8 @@ interface PostCardProps {
 export function PostCard({ post, index = 0, showImage = true }: PostCardProps) {
   // Use event_name as slug for URL
   const slug = post.event_name.toLowerCase().replace(/\s+/g, '-');
-  const firstImage = post.images?.[0];
-  const imagePath = firstImage?.url || firstImage?.image_path;
+  const featuredImage = post.images?.find((image) => image.is_header) || post.images?.[0];
+  const imagePath = featuredImage?.url || featuredImage?.image_url || featuredImage?.image_path;
   const imageUrl = imagePath ? getImageUrl(imagePath) : null;
 
   return (
@@ -83,8 +83,8 @@ export function PostCard({ post, index = 0, showImage = true }: PostCardProps) {
  */
 export function PostCardCompact({ post }: { post: Post }) {
   const slug = post.event_name.toLowerCase().replace(/\s+/g, '-');
-  const firstImage = post.images?.[0];
-  const imagePath = firstImage?.url || firstImage?.image_path;
+  const featuredImage = post.images?.find((image) => image.is_header) || post.images?.[0];
+  const imagePath = featuredImage?.url || featuredImage?.image_url || featuredImage?.image_path;
   const imageUrl = imagePath ? getImageUrl(imagePath) : null;
 
   return (

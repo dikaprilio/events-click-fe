@@ -155,8 +155,8 @@ function WorkCard({ post, index, isMobile = false }: {
   isMobile?: boolean;
 }) {
   const slug = post.event_name.toLowerCase().replace(/\s+/g, '-');
-  const firstImage = post.images?.[0];
-  const imagePath = firstImage?.url || firstImage?.image_path;
+  const featuredImage = post.images?.find((image) => image.is_header) || post.images?.[0];
+  const imagePath = featuredImage?.url || featuredImage?.image_url || featuredImage?.image_path;
   const imageUrl = imagePath ? getImageUrl(imagePath) : null;
 
   return (
