@@ -2,9 +2,23 @@
 
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
+import { useCustomElementsBySection } from '@/hooks/use-custom-elements';
+import { findElement } from '@/types/custom-element';
+import { getImageUrl } from '@/lib/utils';
 
 export default function ExpectationReality() {
     const sectionRef = useRef<HTMLElement>(null);
+    const { data: cmsElements } = useCustomElementsBySection('design_reality');
+    const designImage = cmsElements ? findElement(cmsElements, 'design_image') : undefined;
+    const realityImage = cmsElements ? findElement(cmsElements, 'reality_image') : undefined;
+    const heading = cmsElements ? findElement(cmsElements, 'heading') : undefined;
+    const description = cmsElements ? findElement(cmsElements, 'description') : undefined;
+    const designImageSrc = designImage?.link_url
+        ? getImageUrl(designImage.link_url)
+        : "https://images.unsplash.com/photo-1549451371-64aa98a6f660?q=80&w=2070&auto=format&fit=crop";
+    const realityImageSrc = realityImage?.link_url
+        ? getImageUrl(realityImage.link_url)
+        : "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop";
     
     // Track scroll progress along the 250vh tall section.
     // "start start" = animation starts when top of section hits top of viewport (becomes sticky)
@@ -39,7 +53,7 @@ export default function ExpectationReality() {
                         transition={{ duration: 0.8 }}
                         className="text-4xl md:text-5xl lg:text-7xl font-bold font-display text-foreground mb-4"
                     >
-                        Magic Happens With <span className="text-primary italic">eventsclick</span>
+                        {heading?.content || 'Magic Happens With'} <span className="text-primary italic">eventsclick</span>
                     </motion.h2>
                     <motion.p 
                         initial={{ opacity: 0, y: 20 }}
@@ -48,8 +62,12 @@ export default function ExpectationReality() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-medium"
                     >
-                        Feel the magic, embrace the vibe. With eventsclick Production,<br className="hidden md:block" />
-                        Your event is alive, even before it starts.
+                        {description?.content || (
+                            <>
+                                Feel the magic, embrace the vibe. With eventsclick Production,<br className="hidden md:block" />
+                                Your event is alive, even before it starts.
+                            </>
+                        )}
                     </motion.p>
                 </div>
 
@@ -59,7 +77,7 @@ export default function ExpectationReality() {
                         {/* Reality (Back image) */}
                         <div className="absolute inset-0 w-full h-full pointer-events-none">
                             <img 
-                                src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop" 
+                                src={realityImageSrc}
                                 alt="Reality" 
                                 className="w-full h-full object-cover dark:brightness-90"
                                 draggable="false"
@@ -81,7 +99,7 @@ export default function ExpectationReality() {
                             style={{ clipPath }}
                         >
                             <img 
-                                src="https://images.unsplash.com/photo-1549451371-64aa98a6f660?q=80&w=2070&auto=format&fit=crop" 
+                                src={designImageSrc}
                                 alt="Design" 
                                 className="w-full h-full object-cover grayscale-[30%] blur-[1px]" 
                                 draggable="false"

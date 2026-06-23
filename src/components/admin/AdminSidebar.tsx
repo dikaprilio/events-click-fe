@@ -11,6 +11,7 @@ const menuItems = [
   { href: '/admin/equipments', label: 'Equipment', icon: EquipmentIcon },
   { href: '/admin/clients', label: 'Clients', icon: ClientsIcon },
   { href: '/admin/pages', label: 'Pages', icon: PagesIcon },
+  { href: '/admin/site-content', label: 'Site Content', icon: SiteContentIcon },
   { href: '/admin/navigation', label: 'Navigation', icon: NavigationIcon },
   { href: '/admin/users', label: 'Users', icon: UsersIcon },
 ];
@@ -199,6 +200,15 @@ function NavigationIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+    </svg>
+  );
+}
+
+function SiteContentIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a2 2 0 012-2h4l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 11h8M8 15h5" />
     </svg>
   );
 }

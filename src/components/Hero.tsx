@@ -1,8 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { useCustomElementsBySection } from '@/hooks/use-custom-elements';
+import { findElement } from '@/types/custom-element';
+import { getImageUrl } from '@/lib/utils';
 
 export default function Hero() {
+    const { data: heroElements } = useCustomElementsBySection('landing');
+    const heroVideo = heroElements ? findElement(heroElements, 'hero_video') : undefined;
+    const videoSrc = heroVideo?.link_url ? getImageUrl(heroVideo.link_url) : '/stock-footage.mp4';
+
     return (
         <section className="relative h-screen min-h-[600px] w-full overflow-hidden flex items-center justify-center">
             {/* Fallback Theme-based Background */}
@@ -12,7 +19,7 @@ export default function Hero() {
             <div className="absolute inset-0 z-0">
                 <video
                     className="w-full h-full object-cover"
-                    src="/stock-footage.mp4"
+                    src={videoSrc}
                     autoPlay
                     loop
                     muted

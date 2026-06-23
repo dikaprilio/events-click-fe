@@ -17,6 +17,7 @@ export type ElementType =
   | 'text' 
   | 'heading' 
   | 'image' 
+  | 'video'
   | 'link'
   | 'html';
 

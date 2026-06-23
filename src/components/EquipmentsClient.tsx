@@ -16,6 +16,7 @@ export default function EquipmentsClient() {
     id: cat.category_name.toLowerCase().replace(/\s+/g, '-'),
     label: cat.category_name,
     categoryId: cat.id, // Pass category_id untuk filtering
+    redirectUrl: cat.redirect_url,
   })) || [];
 
   // Tambah 'All Equipment' di awal

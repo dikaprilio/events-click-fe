@@ -60,3 +60,23 @@ export function fetchEquipments(limit: number = 100): Promise<Equipment[]> {
 export function fetchEquipmentCategories(): Promise<EquipmentCategory[]> {
   return clientFetch<EquipmentCategory[]>('/tags/get-all-categories');
 }
+
+export function createEquipmentCategory(data: { categoryName: string; redirect_url?: string | null }): Promise<EquipmentCategory> {
+  return clientFetch<EquipmentCategory>('/tags/add-categories', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export function updateEquipmentCategory(id: number, data: { categoryName: string; redirect_url?: string | null }): Promise<EquipmentCategory> {
+  return clientFetch<EquipmentCategory>(`/tags/edit-categories/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export function deleteEquipmentCategory(id: number): Promise<null> {
+  return clientFetch<null>(`/tags/delete-categories/${id}`, {
+    method: 'DELETE',
+  });
+}

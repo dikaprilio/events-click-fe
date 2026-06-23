@@ -15,6 +15,7 @@ export interface Equipment {
 export interface EquipmentCategory {
   id: number;
   category_name: string;
+  redirect_url?: string | null;
 }
 
 /**

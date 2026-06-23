@@ -87,3 +87,61 @@ export function fetchCustomElements(): Promise<CustomElement[]> {
 export function fetchCustomElementsBySection(section: string): Promise<CustomElement[]> {
   return clientFetch<CustomElement[]>(`/custom-elements/section/${encodeURIComponent(section)}`);
 }
+
+export interface CustomElementInput {
+  element_name: string;
+  section: string;
+  element_type: string;
+  content?: string | null;
+  link_url?: string | null;
+  element_file?: File | null;
+}
+
+function toCustomElementFormData(input: CustomElementInput): FormData {
+  const formData = new FormData();
+  formData.append('element_name', input.element_name);
+  formData.append('section', input.section);
+  formData.append('element_type', input.element_type);
+  if (input.content !== undefined && input.content !== null) {
+    formData.append('content', input.content);
+  }
+  if (input.link_url !== undefined && input.link_url !== null) {
+    formData.append('link_url', input.link_url);
+  }
+  if (input.element_file) {
+    formData.append('element_file', input.element_file);
+  }
+  return formData;
+}
+
+export function createCustomElement(input: CustomElementInput): Promise<CustomElement> {
+  return clientFetch<CustomElement>('/custom-elements/add', {
+    method: 'POST',
+    body: toCustomElementFormData(input),
+  });
+}
+
+export function updateCustomElement(id: number, input: Partial<CustomElementInput>): Promise<CustomElement> {
+  const formData = new FormData();
+  Object.entries(input).forEach(([key, value]) => {
+    if (value === undefined || value === null) return;
+    if (key === 'element_file' && value instanceof File) {
+      formData.append('element_file', value);
+      return;
+    }
+    if (key !== 'element_file') {
+      formData.append(key, String(value));
+    }
+  });
+
+  return clientFetch<CustomElement>(`/custom-elements/update/${id}`, {
+    method: 'PUT',
+    body: formData,
+  });
+}
+
+export function deleteCustomElement(id: number): Promise<{ id: number }> {
+  return clientFetch<{ id: number }>(`/custom-elements/delete/${id}`, {
+    method: 'DELETE',
+  });
+}

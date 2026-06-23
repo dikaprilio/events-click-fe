@@ -8,6 +8,7 @@ import { PostCardSkeleton } from './PostCardSkeleton';
 interface Category {
   id: string;
   label: string;
+  redirectUrl?: string | null;
 }
 
 interface PostFilterProps {
@@ -25,7 +26,8 @@ export function PostFilter({ posts, categories, isLoading }: PostFilterProps) {
     // For now, we'll filter by tag_name or tag.name matching the category
     return posts.filter(post => {
       const tagName = post.tag?.name || post.tag_name || '';
-      return tagName.toLowerCase() === activeCategory.toLowerCase();
+      const tagSlug = post.tag?.slug || post.tag_slug || '';
+      return tagSlug === activeCategory || tagName.toLowerCase() === activeCategory.toLowerCase();
     });
   }, [posts, activeCategory]);
 
@@ -60,7 +62,13 @@ export function PostFilter({ posts, categories, isLoading }: PostFilterProps) {
                 ? 'bg-primary border-primary text-white'
                 : 'bg-transparent border-primary/20 text-muted-foreground hover:border-primary hover:text-primary'
             }`}
-            onClick={() => setActiveCategory(cat.id)}
+            onClick={() => {
+              if (cat.redirectUrl) {
+                window.location.href = cat.redirectUrl;
+                return;
+              }
+              setActiveCategory(cat.id);
+            }}
           >
             {cat.label}
           </button>

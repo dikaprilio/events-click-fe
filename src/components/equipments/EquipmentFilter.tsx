@@ -9,6 +9,7 @@ interface Category {
   id: string;
   label: string;
   categoryId?: number; // Optional: untuk mapping ke category_id dari API
+  redirectUrl?: string | null;
 }
 
 interface EquipmentFilterProps {
@@ -69,7 +70,13 @@ export function EquipmentFilter({ equipments, categories, isLoading }: Equipment
                 ? 'bg-primary border-primary text-white'
                 : 'bg-transparent border-primary/20 text-muted-foreground hover:border-primary hover:text-primary'
             }`}
-            onClick={() => setActiveCategory(cat.id)}
+            onClick={() => {
+              if (cat.redirectUrl) {
+                window.location.href = cat.redirectUrl;
+                return;
+              }
+              setActiveCategory(cat.id);
+            }}
           >
             {cat.label}
           </button>

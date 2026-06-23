@@ -28,6 +28,7 @@ export interface Post {
   slug?: string;
   tag_id?: number;
   tag_name?: string;
+  tag_slug?: string;
   tag?: PostTag;
   images: PostImage[];
   created_at: string;

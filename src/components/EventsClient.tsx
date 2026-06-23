@@ -1,6 +1,7 @@
 'use client';
 
 import { usePosts } from '@/hooks/use-posts';
+import { useTags } from '@/hooks/use-tags';
 import { PostFilter } from '@/components/posts/PostFilter';
 import { PostCardSkeleton } from '@/components/posts/PostCardSkeleton';
 
@@ -14,6 +15,16 @@ const categories = [
 
 export default function EventsClient() {
   const { data: posts, isLoading, error } = usePosts();
+  const { data: eventTags } = useTags();
+  const dynamicCategories = eventTags?.map((tag) => ({
+    id: tag.slug,
+    label: tag.name,
+    redirectUrl: tag.redirect_url,
+  }));
+  const displayCategories = [
+    { id: 'all', label: 'All Events' },
+    ...((dynamicCategories && dynamicCategories.length > 0) ? dynamicCategories : categories.slice(1)),
+  ];
 
   // Debug logging
   if (error) {
@@ -62,7 +73,7 @@ export default function EventsClient() {
             <>
               {/* Filter Buttons Skeleton */}
               <div className="flex justify-center flex-wrap gap-3 mb-16">
-                {categories.map((_, i) => (
+                {displayCategories.map((_, i) => (
                   <div
                     key={i}
                     className="h-10 w-28 bg-gray-800/50 rounded-full animate-pulse"
@@ -76,7 +87,7 @@ export default function EventsClient() {
           ) : (
             <PostFilter 
               posts={posts || []} 
-              categories={categories}
+              categories={displayCategories}
             />
           )}
         </div>

@@ -7,3 +7,4 @@ export * from './posts';
 export * from './equipments';
 export * from './clients';
 export * from './custom-elements';
+export * from './faqs';

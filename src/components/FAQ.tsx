@@ -1,11 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { faqs } from '@/data/faq';
+import { fetchFaqs } from '@/lib/api/faqs';
 
 export default function FAQ() {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
     const [isTyping, setIsTyping] = useState<number | null>(null);
+    const { data } = useQuery({
+        queryKey: ['faqs', 'public'],
+        queryFn: fetchFaqs,
+        staleTime: 1000 * 60 * 5,
+    });
+    const displayFaqs = data && data.length >= 3 ? data : faqs;
 
     const toggleFAQ = (index: number) => {
         if (openIndex === index) {
@@ -31,7 +39,7 @@ export default function FAQ() {
                 </div>
 
                 <div className="flex flex-col space-y-0">
-                    {faqs.map((faq, index) => (
+                    {displayFaqs.slice(0, 7).map((faq, index) => (
                         <div
                             key={index}
                             className="flex flex-col space-y-4 animate-fade-in-up"

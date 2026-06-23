@@ -24,7 +24,7 @@ export default function Footer() {
     return (
         <footer className="bg-secondary border-t border-primary/10 pt-20 pb-8 mt-auto">
             <div className="max-w-5xl mx-auto px-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
                     {/* Brand Info */}
                     <div className="space-y-6">
                         <h3 className="text-2xl font-bold text-foreground">eventsclick</h3>
@@ -45,17 +45,6 @@ export default function Footer() {
                                 <p>Semarang, Central Java</p>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Navigation */}
-                    <div>
-                        <h4 className="font-display text-base text-foreground font-bold uppercase tracking-wider mb-6">Navigation</h4>
-                        <ul className="space-y-4">
-                            <li><Link href="/" className="text-muted-foreground hover:text-primary transition-colors text-[15px]">Home</Link></li>
-                            <li><Link href="/about" className="text-muted-foreground hover:text-primary transition-colors text-[15px]">About Us</Link></li>
-                            <li><Link href="/events" className="text-muted-foreground hover:text-primary transition-colors text-[15px]">Our Works</Link></li>
-                            <li><Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors text-[15px]">Contact</Link></li>
-                        </ul>
                     </div>
 
                     {/* Services */}

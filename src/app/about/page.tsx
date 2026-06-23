@@ -60,10 +60,14 @@ export default function AboutPage() {
                 <div className="max-w-5xl mx-auto px-6 text-center">
                     <h2 className="text-3xl font-bold mb-10 text-foreground">Our Headquarters</h2>
                     <div className="glass-card p-2 md:p-4 aspect-[21/9] w-full relative overflow-hidden">
-                        {/* Map Placeholder */}
-                        <div className="w-full h-full bg-background rounded-xl flex items-center justify-center text-muted-foreground">
-                            Interactive Map Loading...
-                        </div>
+                        <iframe
+                            title="eventsclick Semarang Office Map"
+                            src="https://www.google.com/maps?q=Jl.%20Imam%20Soeparto%20No%209%20Tembalang%20Semarang%20Jawa%20Tengah&output=embed"
+                            className="w-full h-full rounded-xl border-0"
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            allowFullScreen
+                        />
                     </div>
                     <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-left max-w-4xl mx-auto">
                         <div>

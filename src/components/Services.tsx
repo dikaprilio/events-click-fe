@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
+import { useCustomElementsBySection } from '@/hooks/use-custom-elements';
+import { getImageUrl } from '@/lib/utils';
 
 const services = [
   {
@@ -39,6 +41,23 @@ const services = [
 ];
 
 export default function Services() {
+  const { data: cmsServices } = useCustomElementsBySection('signature_services');
+  const dynamicServices = cmsServices
+    ?.map((element) => {
+      try {
+        const parsed = JSON.parse(element.content || '{}') as { title?: string; items?: string[] };
+        return {
+          title: parsed.title || element.element_name,
+          image: element.link_url ? getImageUrl(element.link_url) : services[0].image,
+          items: Array.isArray(parsed.items) ? parsed.items : [],
+        };
+      } catch {
+        return null;
+      }
+    })
+    .filter((service): service is { title: string; image: string; items: string[] } => !!service && !!service.title && service.items.length > 0);
+  const displayServices = dynamicServices && dynamicServices.length > 0 ? dynamicServices : services;
+
   return (
     <section className="py-24 bg-background">
       <div className="max-w-6xl mx-auto px-6">
@@ -56,7 +75,7 @@ export default function Services() {
 
         {/* Service Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {services.map((service, index) => (
+          {displayServices.map((service, index) => (
             <div
               key={service.title}
               className="group relative h-[500px] rounded-2xl overflow-hidden animate-fade-in-up"
