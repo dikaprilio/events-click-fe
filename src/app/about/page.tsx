@@ -1,13 +1,41 @@
 
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbSchema, localBusinessSchema, organizationSchema, webPageSchema } from '@/lib/seo/schema';
+import { absoluteUrl } from '@/lib/seo/url';
+
 export const metadata = {
-    title: "About Us | eventsclick",
-    description: "Learn about eventsclick, our history, and our team."
+    title: "About eventsclick",
+    description: "Kenali eventsclick, event organizer Indonesia berbasis Semarang untuk corporate events, brand activation, MICE, dan event production.",
+    alternates: {
+        canonical: absoluteUrl('/about'),
+    },
+    openGraph: {
+        title: "About eventsclick",
+        description: "Event organizer Indonesia berbasis Semarang untuk pengalaman event yang rapi, kreatif, dan berdampak.",
+        url: absoluteUrl('/about'),
+    },
 };
 
 
 export default function AboutPage() {
+    const schemas = [
+        organizationSchema(),
+        localBusinessSchema(),
+        webPageSchema({
+            type: 'AboutPage',
+            name: 'About eventsclick',
+            description: metadata.description,
+            path: '/about',
+        }),
+        breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'About', path: '/about' },
+        ]),
+    ];
+
     return (
         <div className="pt-20">
+            <JsonLd data={schemas} />
             <section className="py-20 text-center bg-[radial-gradient(circle_at_center,rgba(0,168,235,0.1)_0%,transparent_70%)]">
                 <div className="max-w-5xl mx-auto px-6">
                     <h1 className="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up text-foreground">About eventsclick</h1>
@@ -33,7 +61,7 @@ export default function AboutPage() {
                                 Founded with a passion for excellence in event production, eventsclick has grown into a premier provider of full-service event solutions in Semarang and beyond. We believe that every event is a unique opportunity to tell a story, connect people, and create lasting memories.
                             </p>
                             <p className="text-muted-foreground leading-relaxed">
-                                Our team of dedicated professionals brings together expertise in creative design, technical production, and logistical planning to ensure seamless execution. Whether it's a corporate gala, a brand activation, or a private celebration, we approach every project with the same level of commitment and attention to detail.
+                                Our team of dedicated professionals brings together expertise in creative design, technical production, and logistical planning to ensure seamless execution. Whether it&apos;s a corporate gala, a brand activation, or a private celebration, we approach every project with the same level of commitment and attention to detail.
                             </p>
 
                             <div className="grid grid-cols-3 gap-6 pt-6">

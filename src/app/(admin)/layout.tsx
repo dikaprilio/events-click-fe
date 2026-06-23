@@ -3,6 +3,10 @@ import './admin-globals.css';
 
 export const metadata = {
   title: 'Admin Dashboard | EventsClick',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function AdminRootLayout({ children }: { children: ReactNode }) {

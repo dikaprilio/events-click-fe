@@ -67,6 +67,17 @@ export async function getPageBySlug(slug: string): Promise<DynamicPage> {
 }
 
 /**
+ * Get published page metadata for public sitemap/SEO usage.
+ */
+export async function getPublishedPages(options?: RequestInit): Promise<DynamicPage[]> {
+  const response = await serverFetch<DynamicPage[]>('/pages/published', {
+    ...options,
+    next: options?.next ?? { revalidate: 300 },
+  });
+  return response.data;
+}
+
+/**
  * Create new page (admin)
  */
 export async function createPage(data: CreatePageData): Promise<DynamicPage> {

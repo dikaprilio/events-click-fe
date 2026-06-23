@@ -1,11 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAllPosts, getPostByName } from '@/lib/api/posts';
 import { Post } from '@/types/post';
 import { getImageUrl, formatDate } from '@/lib/utils';
 import { EventGallery } from './EventGallery';
 import { Calendar, Tag, Sparkles, ArrowRight } from 'lucide-react';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbSchema, eventPortfolioSchema, webPageSchema } from '@/lib/seo/schema';
+import { absoluteUrl, getPostHeaderImageUrl, getPostSlug, stripHtml, trimText } from '@/lib/seo/url';
 
 export const dynamicParams = true;
 
@@ -13,18 +17,51 @@ interface EventDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: EventDetailPageProps) {
+export async function generateMetadata({ params }: EventDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
   try {
     const post = await getPostByName(slug);
+    const postSlug = getPostSlug(post);
+    const description = trimText(stripHtml(post.description), 155) || `Portfolio event ${post.title} by eventsclick.`;
+    const imageUrl = getPostHeaderImageUrl(post);
+
     return {
-      title: `${post.title} | eventsclick`,
-      description: post.description || `View details about ${post.title}`,
+      title: post.title,
+      description,
+      alternates: {
+        canonical: absoluteUrl(`/events/${postSlug}`),
+      },
+      openGraph: {
+        title: `${post.title} | eventsclick`,
+        description,
+        url: absoluteUrl(`/events/${postSlug}`),
+        type: 'article',
+        publishedTime: post.created_at,
+        modifiedTime: post.updated_at || post.created_at,
+        images: imageUrl
+          ? [
+            {
+              url: imageUrl,
+              alt: `${post.title} event by eventsclick`,
+            },
+          ]
+          : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${post.title} | eventsclick`,
+        description,
+        images: imageUrl ? [imageUrl] : undefined,
+      },
     };
   } catch {
     return {
-      title: 'Event Not Found | eventsclick',
+      title: 'Event Not Found',
       description: 'The requested event could not be found.',
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 }
@@ -51,6 +88,21 @@ export default async function EventDetail({ params }: EventDetailPageProps) {
   }
 
   const relatedPosts = await getRelatedPosts(post, 3);
+  const postSlug = getPostSlug(post);
+  const schemas = [
+    webPageSchema({
+      name: post.title,
+      description: trimText(stripHtml(post.description), 220) || `Portfolio event ${post.title} by eventsclick.`,
+      path: `/events/${postSlug}`,
+      image: getPostHeaderImageUrl(post),
+    }),
+    eventPortfolioSchema(post),
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Events', path: '/events' },
+      { name: post.title, path: `/events/${postSlug}` },
+    ]),
+  ];
 
   // Explicit header image, fallback to first image
   const headerImage =
@@ -66,6 +118,7 @@ export default async function EventDetail({ params }: EventDetailPageProps) {
 
   return (
     <article className="min-h-screen bg-background transition-colors duration-300">
+      <JsonLd data={schemas} />
       {/* Hero Section */}
       <section className="relative h-[70vh] min-h-[500px] w-full flex items-end overflow-hidden">
         {headerImageUrl ? (
