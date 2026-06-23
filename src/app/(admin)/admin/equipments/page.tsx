@@ -2,19 +2,26 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEquipments } from '@/hooks/use-equipments';
+import { useEquipments, useEquipmentCategories } from '@/hooks/use-equipments';
 import { useDeleteEquipment } from '@/hooks/use-admin-equipments';
 import { getImageUrl } from '@/lib/utils';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Equipment } from '@/types/equipment';
+import { Equipment, EquipmentCategory } from '@/types/equipment';
+import {
+  createEquipmentCategory,
+  deleteEquipmentCategory,
+  updateEquipmentCategory,
+} from '@/lib/api/equipments';
 
 export default function AdminEquipmentsPage() {
   const { data: equipments, isLoading, error } = useEquipments({ limit: 100 });
+  const { data: categories, refetch: refetchCategories } = useEquipmentCategories();
   const deleteEquipment = useDeleteEquipment();
   const [equipmentToDelete, setEquipmentToDelete] = useState<Equipment | null>(null);
+  const [typeDraft, setTypeDraft] = useState({ categoryName: '', redirect_url: '' });
 
   const handleDelete = async () => {
     if (!equipmentToDelete) return;
@@ -25,6 +32,25 @@ export default function AdminEquipmentsPage() {
       setEquipmentToDelete(null);
     } catch {
       toast.error('Failed to delete equipment');
+    }
+  };
+
+  const handleAddType = async () => {
+    if (!typeDraft.categoryName.trim()) {
+      toast.error('Type name is required');
+      return;
+    }
+
+    try {
+      await createEquipmentCategory({
+        categoryName: typeDraft.categoryName.trim(),
+        redirect_url: typeDraft.redirect_url.trim() || null,
+      });
+      toast.success('Equipment type added');
+      setTypeDraft({ categoryName: '', redirect_url: '' });
+      await refetchCategories();
+    } catch {
+      toast.error('Failed to add equipment type');
     }
   };
 
@@ -66,6 +92,43 @@ export default function AdminEquipmentsPage() {
           <PlusIcon className="w-4 h-4" />
           Add Equipment
         </Link>
+      </div>
+
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-5">
+        <div>
+          <h2 className="text-xl font-bold text-gray-900">Equipment Types</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Add more equipment type filters and optional redirect links. If a redirect URL is filled, clicking the type chip on the public page will open that URL instead of filtering.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_auto] gap-3">
+          <input
+            className="admin-input"
+            placeholder="Type name, e.g. Rigging"
+            value={typeDraft.categoryName}
+            onChange={(event) => setTypeDraft((prev) => ({ ...prev, categoryName: event.target.value }))}
+          />
+          <input
+            className="admin-input"
+            placeholder="Optional redirect URL"
+            value={typeDraft.redirect_url}
+            onChange={(event) => setTypeDraft((prev) => ({ ...prev, redirect_url: event.target.value }))}
+          />
+          <button className="admin-btn" type="button" onClick={handleAddType}>
+            Add Type
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          {categories?.map((category) => (
+            <EquipmentTypeEditor
+              key={category.id}
+              category={category}
+              onReload={refetchCategories}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
@@ -163,6 +226,75 @@ export default function AdminEquipmentsPage() {
           </div>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+function EquipmentTypeEditor({
+  category,
+  onReload,
+}: {
+  category: EquipmentCategory;
+  onReload: () => Promise<unknown>;
+}) {
+  const [draft, setDraft] = useState({
+    categoryName: category.category_name,
+    redirect_url: category.redirect_url || '',
+  });
+
+  const saveType = async () => {
+    if (!draft.categoryName.trim()) {
+      toast.error('Type name is required');
+      return;
+    }
+
+    try {
+      await updateEquipmentCategory(category.id, {
+        categoryName: draft.categoryName.trim(),
+        redirect_url: draft.redirect_url.trim() || null,
+      });
+      toast.success('Equipment type updated');
+      await onReload();
+    } catch {
+      toast.error('Failed to update equipment type');
+    }
+  };
+
+  const removeType = async () => {
+    if (!window.confirm(`Delete "${category.category_name}"? Equipment using this type may lose its category.`)) {
+      return;
+    }
+
+    try {
+      await deleteEquipmentCategory(category.id);
+      toast.success('Equipment type deleted');
+      await onReload();
+    } catch {
+      toast.error('Failed to delete equipment type');
+    }
+  };
+
+  return (
+    <div className="rounded-lg border border-gray-200 p-4 space-y-3">
+      <input
+        className="admin-input"
+        value={draft.categoryName}
+        onChange={(event) => setDraft((prev) => ({ ...prev, categoryName: event.target.value }))}
+      />
+      <input
+        className="admin-input"
+        placeholder="Optional redirect URL"
+        value={draft.redirect_url}
+        onChange={(event) => setDraft((prev) => ({ ...prev, redirect_url: event.target.value }))}
+      />
+      <div className="flex flex-wrap gap-2">
+        <button className="admin-btn" type="button" onClick={saveType}>
+          Save Type
+        </button>
+        <button className="admin-btn-danger" type="button" onClick={removeType}>
+          Delete
+        </button>
+      </div>
     </div>
   );
 }
