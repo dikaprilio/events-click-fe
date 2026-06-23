@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/* Admin ONLY styles - completely isolated from main site */
+
+@theme {
+  --color-primary: #00a8eb;
+  --color-primary-light: #33b9ef;
+  --color-primary-dark: #0086bc;
+  --color-primary-foreground: #ffffff;
+
+  --color-background: #fafafa;
+  --color-foreground: #0f172a;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #0f172a;
+
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+
+  --color-accent: #00a8eb;
+  --color-accent-foreground: #ffffff;
+
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: #e2e8f0;
+  --color-input: #e2e8f0;
+  --color-ring: #00a8eb;
+
+  --font-sans: var(--font-jakarta), sans-serif;
+  --font-display: var(--font-outfit), sans-serif;
+}
+
+/* Force light mode on html and body */
+html,
+body {
+  color: #0f172a !important;
+  background: #fafafa !important;
+  font-family: var(--font-jakarta), sans-serif;
+}
+
+/* Override any dark mode that might leak from parent */
+* {
+  --background: #fafafa !important;
+  --foreground: #0f172a !important;
+  --card: #ffffff !important;
+  --card-foreground: #0f172a !important;
+  --secondary: #f1f5f9 !important;
+  --secondary-foreground: #0f172a !important;
+  --muted: #f1f5f9 !important;
+  --muted-foreground: #64748b !important;
+  --border: #e2e8f0 !important;
+  --input: #e2e8f0 !important;
+  --ring: #00a8eb !important;
+  --primary-foreground: #ffffff !important;
+  --accent-foreground: #ffffff !important;
+  --destructive: #ef4444 !important;
+  --destructive-foreground: #ffffff !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-outfit), sans-serif;
+}
+
+/* Scrollbar - light mode only */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00a8eb;
+}

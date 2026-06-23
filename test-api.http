@@ -1,0 +1,13 @@
+### Test API Endpoints
+
+### Get all posts (Backend)
+GET http://localhost:3000/api/posts/get-all
+
+### Get random posts (Backend)
+GET http://localhost:3000/api/posts/random?count=3
+
+### Get single post (Backend)
+GET http://localhost:3000/api/posts/name/wardah-ramadan-2025
+
+### Frontend page (should work)
+GET http://localhost:3001/events

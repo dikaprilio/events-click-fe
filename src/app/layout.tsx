@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import BottomNav from "@/components/BottomNav";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
-import CurtainLoader from "@/components/CurtainLoader";
+
 import { Providers } from "./providers";
+import { LayoutWrapper } from "@/components/LayoutWrapper";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -42,14 +41,14 @@ export default function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning>
       <body className={`${jakarta.variable} ${outfit.variable} antialiased bg-background text-foreground transition-colors duration-300`}>
-        <CurtainLoader />
+
         <Providers>
           <SmoothScroll />
           <CustomCursor />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <BottomNav />
+          <LayoutWrapper>
+            <main>{children}</main>
+          </LayoutWrapper>
+          <WhatsAppButton />
         </Providers>
       </body>
     </html>
