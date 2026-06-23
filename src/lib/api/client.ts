@@ -31,6 +31,21 @@ function extractErrorMessage(error: string | Array<{ field: string; message: str
   return error.map(e => e.message).join(', ');
 }
 
+async function parseApiResponse<T>(response: Response, endpoint: string): Promise<ApiResponse<T>> {
+  const contentType = response.headers.get('content-type') || '';
+
+  if (!contentType.includes('application/json')) {
+    const body = await response.text();
+    const snippet = body.replace(/\s+/g, ' ').trim().slice(0, 120);
+    throw new ApiError(
+      `HTTP ${response.status} from ${endpoint}: expected JSON but received ${contentType || 'unknown content type'}${snippet ? ` (${snippet})` : ''}`,
+      response.status
+    );
+  }
+
+  return response.json();
+}
+
 /**
  * Server-side fetch wrapper
  * Use this in Server Components and Server Actions
@@ -53,7 +68,7 @@ export async function serverFetch<T>(
     },
   });
 
-  const data: ApiResponse<T> = await response.json();
+  const data = await parseApiResponse<T>(response, endpoint);
 
   if (!response.ok || data.code >= 400 || isErrorResponse(data)) {
     const errorMessage = isErrorResponse(data)
@@ -108,7 +123,7 @@ export async function clientFetch<T>(
       },
     });
 
-    const data: ApiResponse<T> = await response.json();
+    const data = await parseApiResponse<T>(response, endpoint);
 
     if (!response.ok || data.code >= 400 || isErrorResponse(data)) {
       const errorMessage = isErrorResponse(data)
