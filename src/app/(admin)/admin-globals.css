@@ -30,16 +30,17 @@
   --color-input: #e2e8f0;
   --color-ring: #00a8eb;
 
-  --font-sans: var(--font-jakarta), sans-serif;
-  --font-display: var(--font-outfit), sans-serif;
+  --font-sans: var(--font-sf);
+  --font-display: var(--font-sf);
 }
 
 /* Force light mode on html and body */
 html,
 body {
+  --font-sf: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   color: #0f172a !important;
   background: #fafafa !important;
-  font-family: var(--font-jakarta), sans-serif;
+  font-family: var(--font-sf);
 }
 
 /* Override any dark mode that might leak from parent */
@@ -62,7 +63,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-sf);
 }
 
 /* Scrollbar - light mode only */

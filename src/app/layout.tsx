@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
@@ -9,18 +8,6 @@ import { LayoutWrapper } from "@/components/LayoutWrapper";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { siteConfig } from "@/lib/seo/site";
 import { absoluteUrl } from "@/lib/seo/url";
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-jakarta",
-  display: "swap",
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -87,7 +74,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body className={`${jakarta.variable} ${outfit.variable} antialiased bg-background text-foreground transition-colors duration-300`}>
+      <body className="antialiased bg-background text-foreground transition-colors duration-300">
 
         <Providers>
           <SmoothScroll />
